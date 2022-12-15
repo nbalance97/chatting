@@ -16,6 +16,30 @@
 3. /listen : 서버에서 메세지를 받았을 때, 받은 메세지를 전달할 URL 
 
 ### 코드
+### Configuration
+1. /chat을 엔드포인트로 지정하고, /listen을 메세지 브로커로 설정합니다.
+``` Java
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Override
+    public void registerStompEndpoints(final StompEndpointRegistry registry) {
+        registry.addEndpoint("/chat");
+        registry.addEndpoint("/chat").withSockJS(); // 브라우저가 WebSocket을 지원하지 않는 경우 대체 메시징 옵션 사용
+    }
+
+    @Override
+    public void configureMessageBroker(final MessageBrokerRegistry registry) {
+        registry.enableSimpleBroker("/listen");
+        //registry.setApplicationDestinationPrefixes(); // MessageMapping에 접두어 넣을 수 있음.
+    }
+}
+```
+
+
+
+### Controller
 1. /chat으로 들어오는 메세지를 수신합니다. 이 때 받는 형식에 맞추어서 chatMessageDto를 구성합니다.
 2. /listen으로 subscribe 하고있는 웹소켓에게 형식에 맞추어서 데이터를 전달합니다.
 

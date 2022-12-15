@@ -9,7 +9,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 /*
 * 웹소켓은 서버와 웹브라우저 간 양방향 전이중 연결
 * 클라이언트나 서버가 연결을 닫기 전까지 연결이 계속해서 유지된다.
-*
 *  */
 
 @Configuration
