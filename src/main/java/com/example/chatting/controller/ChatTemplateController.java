@@ -20,10 +20,9 @@ public class ChatTemplateController {
     @SendTo("/listen")
     public ChatMessageDto chatMessageDto(ChatMessageDto chatMessageDto) {
         /*
-        클라이언트 측에서 subscribe 해둔 url로 sendTo를 지정해 두면, 해당 url로 메시지가 전송됩니다.
-         */
+            클라이언트 측에서 subscribe 해둔 url로 sendTo를 지정해 두면, 해당 url로 메시지가 전송됩니다.
+        */
         System.out.println("메시지가 도착했습니다." + chatMessageDto.getMessage());
         return new ChatMessageDto(chatMessageDto.getMessage());
     }
-
 }
