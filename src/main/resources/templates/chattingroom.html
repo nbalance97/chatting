@@ -1,16 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js" integrity="sha512-tL4PIUsPy+Rks1go4kQG8M8/ItpRMvKnbBjQm4d2DQnFwgcBYRRN00QdyQnWSCwNMsoY/MfJY8nHp2CzlNdtZA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script type="text/javascript">
+    let stompClient = null;
+
+    function connectOrDisconnect() {
+        if(stompClient != null) {
+            stompClient.disconnect();
+            return;
+        }
+
+        let socket = new SockJS('/chat');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(f) {
+            stompClient.subscribe('/listen', function(messageOutput) {
+                console.log(messageOutput);
+                showMessageOutput(JSON.parse(messageOutput.body));
+            });
+        });
+    }
+
+    function sendMessage() {
+        let text = document.getElementById('message').value;
+        stompClient.send("/chat", {},
+            JSON.stringify({'message':text}));
+    }
+
+    function showMessageOutput(messageOutput) {
+        let table = document.getElementById('table');
+        let row = table.insertRow();
+        let cell = row.insertCell(0);
+        cell.innerText = messageOutput.message;
+    }
+
+</script>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-    <table>
+    <button onclick="connectOrDisconnect();">연결하기</button>
+
+    <table id="table">
         <tr>
             <th>채팅 내용</th>
         </tr>
     </table>
 
-    <button>제출하기</button>
+    <input type="text" id="message">
+    <button onclick="sendMessage();">입력하기</button>
 </body>
 </html>
