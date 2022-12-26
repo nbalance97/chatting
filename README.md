@@ -2,10 +2,6 @@
 
 ## 요구사항
 
-### 채팅방
-1. 사용자는 채팅방을 만들 수 있습니다.
-2. 사용자는 현재 열려있는 채팅방을 조회할 수 있습니다.
-
 ### 채팅
 1. 사용자는 채팅에 참여할 수 있습니다.
 2. 채팅에는 최대 3명의 사용자가 참여할 수 있습니다.
@@ -26,13 +22,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(final StompEndpointRegistry registry) {
         registry.addEndpoint("/chat");
-        registry.addEndpoint("/chat").withSockJS(); // 브라우저가 WebSocket을 지원하지 않는 경우 대체 메시징 옵션 사용
+        registry.addEndpoint("/chat").withSockJS(); 
     }
 
     @Override
     public void configureMessageBroker(final MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/listen");
-        //registry.setApplicationDestinationPrefixes(); // MessageMapping에 접두어 넣을 수 있음.
+        //registry.setApplicationDestinationPrefixes(); 
     }
 }
 ```
