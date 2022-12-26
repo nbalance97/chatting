@@ -17,13 +17,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(final StompEndpointRegistry registry) {
+        // 클라이언트에서 websocket에 접속하는 Endpoint를 등록
+        // withSockJS() -> websocket을 지원하지 않는 경우 fallback 옵션 활성화에 사용
+
         registry.addEndpoint("/chat");
-        registry.addEndpoint("/chat").withSockJS(); // 브라우저가 WebSocket을 지원하지 않는 경우 대체 메시징 옵션 사용
+        registry.addEndpoint("/chat").withSockJS();
     }
 
-    @Override
-    public void configureMessageBroker(final MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/listen");
-        //registry.setApplicationDestinationPrefixes(); // MessageMapping에 접두어 넣을 수 있음.
-    }
+    // (추측) 아래 코드는 @SendTo 어노테이션을 사용할 때 적합한 것 같습니다.
+//    @Override
+//    public void configureMessageBroker(final MessageBrokerRegistry registry) {
+//        registry.enableSimpleBroker("/listen");
+//        //registry.setApplicationDestinationPrefixes(); // MessageMapping에 접두어 넣을 수 있음.
+//    }
 }

@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ChatMessageDto {
 
+    private String roomId;
     private String message;
 }

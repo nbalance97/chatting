@@ -7,6 +7,8 @@
     let stompClient = null;
 
     function connectOrDisconnect() {
+        let roomId = document.getElementById("room-id").value;
+
         if(stompClient != null) {
             stompClient.disconnect();
             return;
@@ -15,17 +17,18 @@
         let socket = new SockJS('/chat');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function(f) {
-            stompClient.subscribe('/listen', function(messageOutput) {
-                console.log(messageOutput);
-                showMessageOutput(JSON.parse(messageOutput.body));
+            stompClient.subscribe('/listen/' + roomId, function(messageOutput) {
+                let receiveMessage = JSON.parse(messageOutput.body);
+                showMessageOutput(receiveMessage.message);
             });
         });
     }
 
     function sendMessage() {
         let text = document.getElementById('message').value;
+        let roomId = document.getElementById("room-id").value;
         stompClient.send("/chat", {},
-            JSON.stringify({'message':text}));
+            JSON.stringify({'roomId':roomId, 'message':text}));
     }
 
     function showMessageOutput(messageOutput) {
@@ -34,7 +37,6 @@
         let cell = row.insertCell(0);
         cell.innerText = messageOutput.message;
     }
-
 </script>
 <head>
     <meta charset="UTF-8">
@@ -50,6 +52,7 @@
     </table>
 
     <input type="text" id="message">
+    <input type="text" id="room-id">
     <button onclick="sendMessage();">입력하기</button>
 </body>
 </html>
