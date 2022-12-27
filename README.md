@@ -50,3 +50,26 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
        return new ChatMessageDto(chatMessageDto.getMessage());
     }
 ```
+
+### 구현 Log
+- SendTo 어노테이션을 제거하고, SimpMessagingTemplate을 직접 사용하여 방을 구분하였습니다.
+  - 방 코드가 2c14인 경우, 클라이언트는 /listen/2c14를 subscribe 하는 방식입니다.
+``` Java
+
+private final SimpMessagingTemplate template;
+
+@MessageMapping("/chat")
+public void chattingWith(ChatMessageDto chatMessageDto) {
+    /*
+        클라이언트 측에서 subscribe 해둔 url로 sendTo를 지정해 두면, 해당 url로 메시지가 전송됩니다.
+        @SendTo("/listen")
+
+        다만, SendTo 어노테이션은 url을 동적으로 설정할 수 없습니다.
+        url을 유동적으로 설정하기 위해서는 SimpMessagingTemplate를 사용합니다.
+    */
+
+    template.convertAndSend("/listen/" + chatMessageDto.getRoomId(),
+            new ChatMessageDto(chatMessageDto.getRoomId(), chatMessageDto.getMessage()));
+    System.out.println(chatMessageDto.getRoomId() + "번 방에 메시지가 도착했습니다 : " + chatMessageDto.getMessage());
+}
+```
