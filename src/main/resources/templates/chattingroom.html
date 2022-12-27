@@ -19,7 +19,7 @@
         stompClient.connect({}, function(f) {
             stompClient.subscribe('/listen/' + roomId, function(messageOutput) {
                 let receiveMessage = JSON.parse(messageOutput.body);
-                showMessageOutput(receiveMessage.message);
+                showMessageOutput(receiveMessage);
             });
         });
     }

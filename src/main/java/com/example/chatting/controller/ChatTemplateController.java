@@ -24,7 +24,7 @@ public class ChatTemplateController {
     }
 
     @MessageMapping("/chat")
-    public void chattingWith(HttpSession session, ChatMessageDto chatMessageDto) {
+    public void chattingWith(ChatMessageDto chatMessageDto) {
         /*
             클라이언트 측에서 subscribe 해둔 url로 sendTo를 지정해 두면, 해당 url로 메시지가 전송됩니다.
             @SendTo("/listen")
